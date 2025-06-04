@@ -1,3 +1,21 @@
+<?php
+// Cálculo con PHP
+$mostrarResultado = false;
+$resultado = "";
+
+if (isset($_GET['calcular'])) {
+    $consumo = 10607; // kWh
+    $horasSol = 5;
+    $dias = 365;
+    $potenciaPanel = 455; // W
+
+    $consumoHora = $consumo / ($dias * $horasSol); // kWh por hora
+    $paneles = ($consumoHora * 1000) / $potenciaPanel; // Convertimos kWh a Wh
+
+    $resultado = "Se requieren aproximadamente " . round($paneles, 1) . " paneles solares (" . ceil($paneles) . " si se redondea).";
+    $mostrarResultado = true;
+}
+?>
 <!DOCTYPE html>
 <html lang="es-mx">
 <head>
@@ -5,7 +23,6 @@
     <title>CiTIM Grupo XB</title>
     <link rel="stylesheet" href="css/problemaStem.css"/>
     <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
-    <script src="js/calcularStem.js"></script>
 </head>
 <body>
   <section class="wrapper">
@@ -51,12 +68,22 @@
         <p>
           No. de paneles = (10607 / (365 × 5)) × 1000 / 455
         </p>
-        <button onclick="calcula_();">Presiona para calcular</button>
+        <!-- Enviamos GET al mismo archivo -->
+        <form method="get" action="problema_paneles.php">
+            <input type="hidden" name="calcular" value="1">
+            <button type="submit">Presiona para calcular</button>
+        </form>
       </section>
 
       <section class="resultado">
         <h2>Resultado:</h2>
-        <div id="resultadoA"></div>
+        <div id="resultadoA">
+          <?php
+            if ($mostrarResultado) {
+              echo "<p>$resultado</p>";
+            }
+          ?>
+        </div>
       </section>
 
     </section>
