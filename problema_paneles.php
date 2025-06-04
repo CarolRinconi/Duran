@@ -1,21 +1,3 @@
-<?php
-// Cálculo con PHP
-$mostrarResultado = false;
-$resultado = "";
-
-if (isset($_GET['calcular'])) {
-    $consumo = 10607; // kWh
-    $horasSol = 5;
-    $dias = 365;
-    $potenciaPanel = 455; // W
-
-    $consumoHora = $consumo / ($dias * $horasSol); // kWh por hora
-    $paneles = ($consumoHora * 1000) / $potenciaPanel; // Convertimos kWh a Wh
-
-    $resultado = "Se requieren aproximadamente " . round($paneles, 1) . " paneles solares (" . ceil($paneles) . " si se redondea).";
-    $mostrarResultado = true;
-}
-?>
 <!DOCTYPE html>
 <html lang="es-mx">
 <head>
@@ -68,20 +50,23 @@ if (isset($_GET['calcular'])) {
         <p>
           No. de paneles = (10607 / (365 × 5)) × 1000 / 455
         </p>
-        <!-- Enviamos GET al mismo archivo -->
-        <form method="get" action="problema_paneles.php">
-            <input type="hidden" name="calcular" value="1">
-            <button type="submit">Presiona para calcular</button>
-        </form>
       </section>
 
       <section class="resultado">
         <h2>Resultado:</h2>
         <div id="resultadoA">
           <?php
-            if ($mostrarResultado) {
-              echo "<p>$resultado</p>";
-            }
+            $consumo_anual = 10607; // kWh
+            $horas_sol_diarias = 5; // horas
+            $dias_anio = 365;
+            $potencia_panel = 455; // W
+
+            $consumo_por_hora = $consumo_anual / ($dias_anio * $horas_sol_diarias);
+            $num_paneles = ($consumo_por_hora * 1000) / $potencia_panel;
+            $num_paneles_redondeado = ceil($num_paneles);
+
+            echo "<p>Se requieren <strong>" . $num_paneles_redondeado . "</strong> paneles solares de 455 W para cubrir el consumo anual.</p>";
+            echo "<p>(Cálculo exacto: " . number_format($num_paneles, 2) . " paneles)</p>";
           ?>
         </div>
       </section>
